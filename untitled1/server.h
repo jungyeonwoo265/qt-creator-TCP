@@ -6,24 +6,17 @@
 #include <QDebug>
 #include <QString>
 #include <iostream>
-
-// TCP
 #include <QList>
 #include <QByteArray>
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
-
-// DB
 #include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlTableModel>
 #include <QSqlDatabase>
 #include <QSqlQuery>
-
-// 스레드
-#include <Qthread>
-
 #include <QDateTime>
+#include <Qthread>
 
 using namespace std;
 
@@ -56,9 +49,9 @@ private:
     Ui::MainWindow *ui;
 
     void Add_New_Client_Connection(QTcpSocket *socket);
-    // QTcpServer클래스의 포이터 변수 TCP_Server 선언
+
     QTcpServer *TCP_Server;
-    // QTcpSocket클래스의 포인터를 저장하는 Client_Connection_List 선언
+
     QList<QTcpSocket*> Client_Connection_List;
 };
 #endif // SERVER_H

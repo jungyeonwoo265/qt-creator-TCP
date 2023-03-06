@@ -9,8 +9,6 @@
 #include <iostream>
 #include <string>
 #include <string.h>
-// TCP
-// 이진데이터를 다루는데 사용
 #include <QDataStream>
 #include <QByteArray>
 #include <QtNetwork/QTcpSocket>
@@ -39,7 +37,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    // TCPSocket 포인터 변수 선언
     QTcpSocket *TCPSocket;
 };
 #endif // CLIENT_H
