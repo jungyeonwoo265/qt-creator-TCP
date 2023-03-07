@@ -35,26 +35,33 @@ void MainWindow::Read_Data_From_Socket()
 
             QJsonObject obj = doc.object();
             int command = obj.value("command").toInt();
-            int columm = obj.value("columm").toInt();
+            int column = obj.value("column").toInt();
             QString Message = obj.value("message").toString();
             QList<QString> msg_list = Message.split(",");
             qDebug()<<command;
             int size = msg_list.size();
             add_textedit(size, msg_list);
-            add_tableWidget(size,columm,msg_list);
+            add_tableWidget(size,column,msg_list);
         }
     }
 }
 
-void MainWindow::add_tableWidget(const int& size,const int& columm , QList<QString>& msg_list){
-    ui->tableWidget->setColumnCount(columm);
-    ui->tableWidget->setRowCount(int(msg_list.size()/columm));
-}
+void MainWindow::add_tableWidget(const int& size,const int& column , QList<QString>& msg_list){
+    int row = msg_list.size()/column;
+    ui->tableWidget->setColumnCount(0);
+    ui->tableWidget->setRowCount(0);
+    ui->tableWidget->setColumnCount(column);
+    ui->tableWidget->setRowCount(row);
+    for(int i=0; i<row; i++)
+        for(int j=0; j<column;j++)
+            ui->tableWidget->setItem(i,j,new QTableWidgetItem(msg_list[column*i+j]));
+    }
 
 void MainWindow::add_textedit(const int& size, QList<QString>& msg_list)
 {
     for(int i=0; i< size;i++)
         ui->textEdit->append(msg_list[i]);
+
 }
 
 void MainWindow::on_pushButton_clicked()

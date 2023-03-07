@@ -70,13 +70,13 @@ void MainWindow::on_pushButton_2_clicked()
     query.prepare(queryStr);
     query.exec();
     query.next();
-    int columm = query.value(0).toInt();
+    int column = query.value(0).toInt();
 
     queryStr = QString("SELECT * FROM daegu_element where category = '관공서'");
     query.prepare(queryStr);
     query.exec();
     while (query.next()) {
-        for(int i=0; i< columm; i++){
+        for(int i=0; i< column; i++){
             QString message = query.value(i).toString();
             qDebug()<<message;
             send_message.append(message);
@@ -84,10 +84,10 @@ void MainWindow::on_pushButton_2_clicked()
     }
     QString msg = send_message.join(",");
     int command = 1;
-    Send_Data_From_Socket(command, columm, msg);
+    Send_Data_From_Socket(command, column, msg);
 }
 
-void MainWindow::Send_Data_From_Socket(const int& command,const int& columm, const QString& msg)
+void MainWindow::Send_Data_From_Socket(const int& command,const int& column, const QString& msg)
 {
     if (ui->comboBox_2->currentText() == "ALL")
     {
@@ -95,7 +95,7 @@ void MainWindow::Send_Data_From_Socket(const int& command,const int& columm, con
         {
             QJsonObject json;
             json.insert("command", command);
-            json.insert("columm", columm);
+            json.insert("column", column);
             json.insert("message", msg);
             QJsonDocument doc(json);
             QByteArray send = doc.toJson();
