@@ -40,13 +40,16 @@ void MainWindow::Add_New_Client_Connection(QTcpSocket *socket)
 {
     Client_Connection_List.append(socket);
     connect(socket,SIGNAL(readyRead()),this,SLOT(Read_Data_From_Socket()));
-    ui-> comboBox ->addItem(QString::number(socket->socketDescriptor()));
     QString Client = "Client : "+QString::number(socket->socketDescriptor())+" connected with The Server.";
     ui-> textEdit ->append(Client);
+    QString query = "SELECT dong_name FROM daegu_dong";
+    int command = 0;
+    read_db(command, query, *socket);
 }
 
 void MainWindow::Read_Data_From_Socket()
 {
+    QString query;
     QTcpSocket *socket =reinterpret_cast<QTcpSocket*>(sender());
     QByteArray Message_From_Server = socket -> readAll();
 
@@ -56,55 +59,47 @@ void MainWindow::Read_Data_From_Socket()
     QJsonObject obj = doc.object();
     int command = obj.value("command").toInt();
     QString Message = obj.value("message").toString();
-    qDebug()<<"command: "<<command<<","<<"Message: "<<Message;
-    ui->textEdit->append(Message);
+    ui->textEdit->append(QString::number(socket->socketDescriptor())+":"+QString::number(command)+":"+Message);
+    if(command == 1)
+        query = "SELECT * FROM daegu_element where category = 'cafe'";
+    else if(command == 2)
+        query = "SELECT * FROM daegu_element where category = '관공서'";
+    read_db(command, query, *socket);
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::read_db(const int& command,const QString& message, QTcpSocket& socket)
 {
     QList<QString> send_message;
     QString queryStr;
     QSqlQuery query;
 
-    queryStr = QString("SELECT COUNT(*) FROM information_schema.columns WHERE table_name='daegu_element';");
+    queryStr = message;
     query.prepare(queryStr);
     query.exec();
     query.next();
-    int column = query.value(0).toInt();
+    QSqlRecord record = query.record();
+    int column = record.count();
 
-    queryStr = QString("SELECT * FROM daegu_element where category = '관공서'");
-    query.prepare(queryStr);
+    query.prepare(message);
     query.exec();
     while (query.next()) {
-        for(int i=0; i< column; i++){
+        for(int i=0; i<column; i++){
             QString message = query.value(i).toString();
-            qDebug()<<message;
             send_message.append(message);
         }
     }
     QString msg = send_message.join(",");
-    int command = 1;
-    Send_Data_From_Socket(command, column, msg);
+    Send_Data_From_Socket(command, column, msg, &socket);
 }
 
-void MainWindow::Send_Data_From_Socket(const int& command,const int& column, const QString& msg)
+void MainWindow::Send_Data_From_Socket(const int& command,const int& column, const QString& msg, QTcpSocket* socket)
 {
-    if (ui->comboBox_2->currentText() == "ALL")
-    {
-        foreach (QTcpSocket *socket, Client_Connection_List)
-        {
-            QJsonObject json;
-            json.insert("command", command);
-            json.insert("column", column);
-            json.insert("message", msg);
-            QJsonDocument doc(json);
-            QByteArray send = doc.toJson();
-            qDebug()<<send.size()<<"byte";
-            socket->write(send);
-        }
-    }
-    else
-    {
-        qDebug() << "test all";
-    }
+    QJsonObject json;
+    json.insert("command", command);
+    json.insert("column", column);
+    json.insert("message", msg);
+    QJsonDocument doc(json);
+    QByteArray send = doc.toJson();
+    qDebug()<<send.size()<<"byte";
+    socket->write(send);
 }

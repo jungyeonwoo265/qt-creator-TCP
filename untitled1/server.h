@@ -19,6 +19,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <Qthread>
+#include <QtSql>
 
 using namespace std;
 
@@ -39,9 +40,9 @@ private slots:
 
     void Read_Data_From_Socket();
 
-    void Send_Data_From_Socket(const int& command,const int& columm, const QString& msg);
+    void Send_Data_From_Socket(const int& command,const int& columm, const QString& msg, QTcpSocket* socket);
 
-    void on_pushButton_2_clicked();
+    void read_db(const int& command,const QString& message, QTcpSocket& socket);
 
 private:
     Ui::MainWindow *ui;

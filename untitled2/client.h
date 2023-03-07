@@ -34,13 +34,15 @@ public:
 private slots:
     void on_pushButton_clicked();
 
-    void on_lineEdit_returnPressed();
-
     void Read_Data_From_Socket();
 
-    void add_textedit(const int& size, QList<QString>& msg_list);
+    void add_tableWidget(const int& columm , QList<QString>& msg_list);
 
-    void add_tableWidget(const int& size,const int& columm , QList<QString>& msg_list);
+    void on_radioButton_clicked();
+
+    void on_radioButton_2_clicked();
+
+    void send_message(int& command, QString& message);
 
 private:
     Ui::MainWindow *ui;
