@@ -16,6 +16,8 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QDateTime>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include <Qthread>
 
 using namespace std;
@@ -37,11 +39,7 @@ private slots:
 
     void Read_Data_From_Socket();
 
-    void on_pushButton_clicked();
-
-    void on_lineEdit_returnPressed();
-
-    void test_db();
+    void Send_Data_From_Socket(const int& command,const int& columm, const QString& msg);
 
     void on_pushButton_2_clicked();
 

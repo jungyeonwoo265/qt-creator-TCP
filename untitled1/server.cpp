@@ -1,7 +1,6 @@
 #include "server.h"
 #include "ui_server.h"
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -29,18 +28,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::test_db()
-{
-    QString object_qstr = QString::fromStdString("달서구");
-    QString queryStr;
-    queryStr = QString("select cafe_name from cafe where address1 like '%%1%'").arg(object_qstr);
-    QSqlQuery query;
-    query.prepare(queryStr);
-    query.exec();
-    while(query.next())
-        qDebug()<<query.value(0).toString();
-}
-
 void MainWindow::newConnection()
 {
     while (TCP_Server->hasPendingConnections())
@@ -55,54 +42,69 @@ void MainWindow::Add_New_Client_Connection(QTcpSocket *socket)
     connect(socket,SIGNAL(readyRead()),this,SLOT(Read_Data_From_Socket()));
     ui-> comboBox ->addItem(QString::number(socket->socketDescriptor()));
     QString Client = "Client : "+QString::number(socket->socketDescriptor())+" connected with The Server.";
-    ui -> textEdit ->append(Client);
+    ui-> textEdit ->append(Client);
 }
 
 void MainWindow::Read_Data_From_Socket()
 {
     QTcpSocket *socket =reinterpret_cast<QTcpSocket*>(sender());
     QByteArray Message_From_Server = socket -> readAll();
-    QString Message = QString::number(socket->socketDescriptor())+"::"+ QString::fromStdString(Message_From_Server.toStdString());
-    qDebug()<<sizeof socket->socketDescriptor();
-    string str_message = Message_From_Server.toStdString();
-    if(str_message == "DB")
-    {
-        test_db();
-    }
-    ui -> textEdit -> append(Message);
-}
 
-void MainWindow::on_pushButton_clicked()
-{
-    QString Message_For_Client = ui->lineEdit->text();
-    QString Receiver = ui->comboBox->currentText();
-    if(ui->comboBox_2->currentText()=="ALL")
-    {
-        foreach(QTcpSocket *socket, Client_Connection_List)
-        {
-            socket->write(Message_For_Client.toStdString().c_str());
-        }
-    }
-    else
-    {
-        foreach(QTcpSocket *socket, Client_Connection_List)
-        {
-            if(socket->socketDescriptor() == Receiver.toLongLong())
-            {
-                socket->write(Message_For_Client.toStdString().c_str());
-            }
-        }
-    }
-    ui->lineEdit->clear();
-}
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(Message_From_Server, &error);
 
-void MainWindow::on_lineEdit_returnPressed()
-{
-    on_pushButton_clicked();
+    QJsonObject obj = doc.object();
+    int command = obj.value("command").toInt();
+    QString Message = obj.value("message").toString();
+    qDebug()<<"command: "<<command<<","<<"Message: "<<Message;
+    ui->textEdit->append(Message);
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    test_db();
+    QList<QString> send_message;
+    QString queryStr;
+    QSqlQuery query;
+
+    queryStr = QString("SELECT COUNT(*) FROM information_schema.columns WHERE table_name='daegu_element';");
+    query.prepare(queryStr);
+    query.exec();
+    query.next();
+    int columm = query.value(0).toInt();
+
+    queryStr = QString("SELECT * FROM daegu_element where category = '관공서'");
+    query.prepare(queryStr);
+    query.exec();
+    while (query.next()) {
+        for(int i=0; i< columm; i++){
+            QString message = query.value(i).toString();
+            qDebug()<<message;
+            send_message.append(message);
+        }
+    }
+    QString msg = send_message.join(",");
+    int command = 1;
+    Send_Data_From_Socket(command, columm, msg);
 }
 
+void MainWindow::Send_Data_From_Socket(const int& command,const int& columm, const QString& msg)
+{
+    if (ui->comboBox_2->currentText() == "ALL")
+    {
+        foreach (QTcpSocket *socket, Client_Connection_List)
+        {
+            QJsonObject json;
+            json.insert("command", command);
+            json.insert("columm", columm);
+            json.insert("message", msg);
+            QJsonDocument doc(json);
+            QByteArray send = doc.toJson();
+            qDebug()<<send.size()<<"byte";
+            socket->write(send);
+        }
+    }
+    else
+    {
+        qDebug() << "test all";
+    }
+}

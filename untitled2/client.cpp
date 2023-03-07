@@ -28,13 +28,33 @@ void MainWindow::Read_Data_From_Socket()
     {
        if(TCPSocket->isOpen())
         {
-            qDebug()<<"메시지 받음";
             QByteArray Data_from_Server = TCPSocket->readAll();
-            qDebug()<< Data_from_Server;
-            QString MessageString = QString::fromUtf8(Data_from_Server);
-            ui->textEdit->append(MessageString);
+            qDebug()<<Data_from_Server.size()<<"byte";
+            QJsonParseError error;
+            QJsonDocument doc = QJsonDocument::fromJson(Data_from_Server, &error);
+
+            QJsonObject obj = doc.object();
+            int command = obj.value("command").toInt();
+            int columm = obj.value("columm").toInt();
+            QString Message = obj.value("message").toString();
+            QList<QString> msg_list = Message.split(",");
+            qDebug()<<command;
+            int size = msg_list.size();
+            add_textedit(size, msg_list);
+            add_tableWidget(size,columm,msg_list);
         }
     }
+}
+
+void MainWindow::add_tableWidget(const int& size,const int& columm , QList<QString>& msg_list){
+    ui->tableWidget->setColumnCount(columm);
+    ui->tableWidget->setRowCount(int(msg_list.size()/columm));
+}
+
+void MainWindow::add_textedit(const int& size, QList<QString>& msg_list)
+{
+    for(int i=0; i< size;i++)
+        ui->textEdit->append(msg_list[i]);
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -43,9 +63,14 @@ void MainWindow::on_pushButton_clicked()
     {
         if(TCPSocket->isOpen())
         {
-            QString qmsg = ui->lineEdit->text();
-            TCPSocket->write(qmsg.toStdString().c_str());
-            qDebug()<<qmsg;
+            QJsonObject json;
+            QString Message = ui->lineEdit->text();
+            int command = 1;
+            json.insert("command", command);
+            json.insert("message", Message);
+            QJsonDocument doc(json);
+            QByteArray send = doc.toJson();
+            TCPSocket->write(send);
         }
         else
             QMessageBox::information(this,"Qr With Keten","error: "+TCPSocket->errorString());
