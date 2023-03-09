@@ -16,6 +16,10 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QList>
+#include <QApplication>
+#include <QWebEngineView>
+#include <fstream>
+#include <QFile>
 
 using namespace std;
 
@@ -43,6 +47,12 @@ private slots:
     void on_radioButton_2_clicked();
 
     void send_message(int& command, QString& message);
+
+    QString make_html();
+
+    void write_html(QString filename);
+
+    void veiw_map();
 
 private:
     Ui::MainWindow *ui;

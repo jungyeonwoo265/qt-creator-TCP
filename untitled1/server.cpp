@@ -63,7 +63,7 @@ void MainWindow::Read_Data_From_Socket()
     if(command == 1)
         query = "SELECT * FROM daegu_element where category = 'cafe'";
     else if(command == 2)
-        query = "SELECT * FROM daegu_element where category = '관공서'";
+        query = "SELECT * FROM daegu_element";
     read_db(command, query, *socket);
 }
 
