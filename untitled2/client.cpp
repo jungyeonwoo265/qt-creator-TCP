@@ -27,25 +27,64 @@ void MainWindow::Read_Data_From_Socket()
 {
     if(TCPSocket&&TCPSocket->isOpen())
     {
-        QByteArray Data_from_Server = TCPSocket->readAll();
-        qDebug()<<Data_from_Server.size()<<"byte";
-        QJsonParseError error;
-        QJsonDocument doc = QJsonDocument::fromJson(Data_from_Server, &error);
+        QByteArray Data;
+        Data = TCPSocket->readAll();
+        if(data_size==0)
+        {
+            data_size = Data.left(20).toInt();
+            qDebug()<<"1: "<<data_size;
+            qDebug()<<"2: "<<Data.size();
+            qDebug()<<"3: "<<Data.mid(20).size();
+            Data_from_Server.append(Data.mid(20));
+        }
+        else{
+            Data_from_Server.append(Data);
+        }
+        Data.clear();
+        qDebug()<<"4: "<<Data_from_Server.size()<<"byte";
+        QJsonDocument doc = QJsonDocument::fromJson(Data_from_Server);
+
         QJsonObject obj = doc.object();
         int command = obj.value("command").toInt();
         int column = obj.value("column").toInt();
         QString Message = obj.value("message").toString();
         QList<QString> msg_list = Message.split(",");
-        if (command == 0){
-            for(int i=0; i<msg_list.size(); i++){
+        if (command == 1)
+        {
+            for(int i=0; i<msg_list.size(); i++)
+            {
                 ui->comboBox_4->addItem(msg_list[i]);
                 ui->comboBox_6->addItem(msg_list[i]);
             }
         }
-        else if(command == 1 || command ==2)
+        else if(command == 2 || command == 3)
+        {
             add_tableWidget(column,msg_list);
-    }
+            QString center = "%1,%2";
+            center = center.arg(msg_list[column-2],msg_list[column-1]);
+            QJsonObject json;
+            QList<QString> po_list;
+            QString latlng = "new kakao.maps.LatLng(%1, %2)";
+            QString title = "'%1'";
+            for(int i=0; i<msg_list.size()/column; i++)
+            {
+                json.insert("title",title.arg(msg_list[i*column+1]));
+                json.insert("latlng", latlng.arg(msg_list[i*column+column-2],msg_list[i*column+column-1]));
+                QJsonDocument jsonDoc(json);
+                QString jsonString = jsonDoc.toJson(QJsonDocument::Compact);
+                po_list.append(jsonString);
+            }
+            QString positions = po_list.join(",");
+            positions = positions.remove("\"");
 
+            QString html = make_html(center, positions);
+            veiw_map(html);
+        }
+        if(command){
+            Data_from_Server.clear();
+            data_size=0;
+        }
+    }
 }
 
 void MainWindow::add_tableWidget(const int& column , QList<QString>& msg_list){
@@ -79,17 +118,16 @@ void MainWindow::on_pushButton_clicked()
     QString message;
     if(ui->radioButton->isChecked())
     {
-        command = 1;
+        command = 2;
         message = "매매";
     }
     else
     {
-        command = 2;
+        command = 3;
         message = "월세";
     }
     send_message(command, message);
     ui->stackedWidget_2->setCurrentIndex(1);
-    veiw_map();
 }
 
 void MainWindow::on_radioButton_clicked()
@@ -103,26 +141,8 @@ void MainWindow::on_radioButton_2_clicked()
     ui->stackedWidget->setCurrentIndex(1);
 }
 
-QString MainWindow::make_html()
-{   QString positions = R"([
-    {
-        title: '더리터 송현점',
-        latlng: new kakao.maps.LatLng(35.8388522201036, 128.564870126813)
-    },
-    {
-        title: '컴포즈커피 대구죽전아이위시점',
-        latlng: new kakao.maps.LatLng(35.8348974104546, 128.5561430456)
-    },
-    {
-        title: '더벤티 대명계대점',
-        latlng: new kakao.maps.LatLng(35.855698603935, 128.583204514986)
-    },
-    {
-        title: '더리터 진천역점',
-        latlng: new kakao.maps.LatLng(35.8380630509341, 128.604210146328)
-    }
-])";
-    QString center = "35.8388522201036,128.564870126813";
+QString MainWindow::make_html(const QString &center, const QString &positions)
+{
     QString html =
         R"(<!DOCTYPE html>
 <html>
@@ -145,7 +165,7 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
 // 마커를 표시할 위치와 title 객체 배열입니다
-var positions = %2;
+var positions = [%2];
 // 마커 이미지의 이미지 주소입니다
 var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
@@ -168,12 +188,11 @@ for (var i = 0; i < positions.length; i ++) {
 </script>
 </body>
 </html>)";
-
     return html.arg(center, positions);
 }
 
 
-void MainWindow::write_html(QString filename)
+void MainWindow::write_html(const QString &filename, const QString &html)
 {
     QFile file(filename);
     // Trying to open in WriteOnly and Text mode
@@ -183,15 +202,15 @@ void MainWindow::write_html(QString filename)
         return;
     }
     QTextStream out(&file);
-    out << make_html();
+    out << html;
     file.flush();
     file.close();
 }
 
-void MainWindow::veiw_map(){
+void MainWindow::veiw_map(const QString &html){
     QLayoutItem* item;
     QString filename = "C:/Qt/marker.html";
-    write_html(filename);
+    write_html(filename, html);
     QWebEngineView *view = new QWebEngineView();
     view->setUrl(QUrl("http://localhost/Qt/marker.html"));
     while((item = ui->verticalLayout->takeAt(0)) != nullptr)

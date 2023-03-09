@@ -43,7 +43,7 @@ void MainWindow::Add_New_Client_Connection(QTcpSocket *socket)
     QString Client = "Client : "+QString::number(socket->socketDescriptor())+" connected with The Server.";
     ui-> textEdit ->append(Client);
     QString query = "SELECT dong_name FROM daegu_dong";
-    int command = 0;
+    int command = 1;
     read_db(command, query, *socket);
 }
 
@@ -60,10 +60,10 @@ void MainWindow::Read_Data_From_Socket()
     int command = obj.value("command").toInt();
     QString Message = obj.value("message").toString();
     ui->textEdit->append(QString::number(socket->socketDescriptor())+":"+QString::number(command)+":"+Message);
-    if(command == 1)
-        query = "SELECT * FROM daegu_element where category = 'cafe'";
-    else if(command == 2)
-        query = "SELECT * FROM daegu_element";
+    if(command == 2)
+        query = "select * from daegu_real_estate where type = '매매'";
+    else if(command == 3)
+        query = "select * from daegu_real_estate where type = '월세'";
     read_db(command, query, *socket);
 }
 
@@ -100,6 +100,11 @@ void MainWindow::Send_Data_From_Socket(const int& command,const int& column, con
     json.insert("message", msg);
     QJsonDocument doc(json);
     QByteArray send = doc.toJson();
+    qDebug()<<"내용"<<send.size()<<"byte";
+    QString send_size =QString("%1").arg(QString::number(send.size()), -20,QLatin1Char(' '));
+    QByteArray byteArray = QByteArray::fromRawData(send_size.toUtf8().constData(), send_size.toUtf8().length());
+    send = byteArray+send;
+
     qDebug()<<send.size()<<"byte";
     socket->write(send);
 }

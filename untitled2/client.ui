@@ -76,7 +76,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QComboBox" name="comboBox_2">
@@ -90,47 +90,27 @@
       </property>
       <item>
        <property name="text">
+        <string>전체</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>5000천만 이하</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>5000천만~1억</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>1억~2억</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>2억~3억</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>3억~4억</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>4억~5억</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>5억~6억</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>6억~7억</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>7억~8억</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>8억~9억</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>~10억</string>
+        <string>2억~</string>
        </property>
       </item>
      </widget>
@@ -145,32 +125,27 @@
       </property>
       <item>
        <property name="text">
+        <string>전체</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>50만원 미만</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>50~70만원</string>
+        <string>50~100만원</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>71~90만원</string>
+        <string>100~200만원</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>91~110만원</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>111~130만원</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>131~150만원</string>
+        <string>200만원~</string>
        </property>
       </item>
      </widget>
@@ -222,6 +197,11 @@
         <height>21</height>
        </rect>
       </property>
+      <item>
+       <property name="text">
+        <string>전지역</string>
+       </property>
+      </item>
      </widget>
      <widget class="QLabel" name="label_8">
       <property name="geometry">
@@ -249,52 +229,22 @@
       </property>
       <item>
        <property name="text">
-        <string>~1000만원</string>
+        <string>전체</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>1000~2000만원</string>
+        <string>1억이하</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>2000~3000만원</string>
+        <string>1억 ~ 5억</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>3000~4000만원</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>4000~5000만원</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>5000~6000만원</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>6000~7000만원</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>7000~8000만원</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>8000~9000만원</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>9000~1억</string>
+        <string>5억 이상</string>
        </property>
       </item>
       <item>
@@ -351,6 +301,11 @@
         <height>21</height>
        </rect>
       </property>
+      <item>
+       <property name="text">
+        <string>전지역</string>
+       </property>
+      </item>
      </widget>
     </widget>
    </widget>
@@ -365,6 +320,11 @@
     </property>
     <item>
      <property name="text">
+      <string>전체</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>10평미만</string>
      </property>
     </item>
@@ -375,17 +335,7 @@
     </item>
     <item>
      <property name="text">
-      <string>21평~30평</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>31평~40평</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>41평~50평</string>
+      <string>21평~</string>
      </property>
     </item>
    </widget>
@@ -403,72 +353,15 @@
     </property>
     <widget class="QWidget" name="page_6"/>
     <widget class="QWidget" name="page_5">
-     <widget class="QLabel" name="label_12">
-      <property name="geometry">
-       <rect>
-        <x>450</x>
-        <y>12</y>
-        <width>36</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>동이름</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_13">
-      <property name="geometry">
-       <rect>
-        <x>500</x>
-        <y>12</y>
-        <width>12</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>동</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_14">
-      <property name="geometry">
-       <rect>
-        <x>560</x>
-        <y>12</y>
-        <width>53</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>매매/월세</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_15">
-      <property name="geometry">
-       <rect>
-        <x>622</x>
-        <y>13</y>
-        <width>48</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>매물현황</string>
-      </property>
-     </widget>
      <widget class="QTableWidget" name="tableWidget">
       <property name="geometry">
        <rect>
-        <x>440</x>
-        <y>40</y>
+        <x>430</x>
+        <y>10</y>
         <width>291</width>
-        <height>281</height>
+        <height>311</height>
        </rect>
       </property>
-      <column>
-       <property name="text">
-        <string>주소</string>
-       </property>
-      </column>
      </widget>
      <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">

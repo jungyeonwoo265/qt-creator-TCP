@@ -20,6 +20,7 @@
 #include <QWebEngineView>
 #include <fstream>
 #include <QFile>
+#include <Windows.h>
 
 using namespace std;
 
@@ -48,14 +49,16 @@ private slots:
 
     void send_message(int& command, QString& message);
 
-    QString make_html();
+    QString make_html(const QString &center, const QString &positions);
 
-    void write_html(QString filename);
+    void write_html(const QString &filename, const QString &html);
 
-    void veiw_map();
+    void veiw_map(const QString &html);
 
 private:
     Ui::MainWindow *ui;
     QTcpSocket *TCPSocket;
+    QByteArray Data_from_Server;
+    int data_size = 0;
 };
 #endif // CLIENT_H
