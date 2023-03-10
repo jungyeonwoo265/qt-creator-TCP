@@ -89,16 +89,9 @@ public:
         comboBox_2->addItem(QString());
         comboBox_2->addItem(QString());
         comboBox_2->addItem(QString());
-        comboBox_2->addItem(QString());
-        comboBox_2->addItem(QString());
-        comboBox_2->addItem(QString());
-        comboBox_2->addItem(QString());
-        comboBox_2->addItem(QString());
         comboBox_2->setObjectName("comboBox_2");
         comboBox_2->setGeometry(QRect(140, 30, 111, 21));
         comboBox_3 = new QComboBox(page);
-        comboBox_3->addItem(QString());
-        comboBox_3->addItem(QString());
         comboBox_3->addItem(QString());
         comboBox_3->addItem(QString());
         comboBox_3->addItem(QString());
@@ -131,13 +124,6 @@ public:
         comboBox_5->addItem(QString());
         comboBox_5->addItem(QString());
         comboBox_5->addItem(QString());
-        comboBox_5->addItem(QString());
-        comboBox_5->addItem(QString());
-        comboBox_5->addItem(QString());
-        comboBox_5->addItem(QString());
-        comboBox_5->addItem(QString());
-        comboBox_5->addItem(QString());
-        comboBox_5->addItem(QString());
         comboBox_5->setObjectName("comboBox_5");
         comboBox_5->setGeometry(QRect(150, 30, 131, 21));
         label_9 = new QLabel(page_2);
@@ -155,8 +141,6 @@ public:
         comboBox_6->setGeometry(QRect(310, 30, 81, 21));
         stackedWidget->addWidget(page_2);
         comboBox_1 = new QComboBox(centralwidget);
-        comboBox_1->addItem(QString());
-        comboBox_1->addItem(QString());
         comboBox_1->addItem(QString());
         comboBox_1->addItem(QString());
         comboBox_1->addItem(QString());
@@ -207,23 +191,16 @@ public:
         radioButton_2->setText(QCoreApplication::translate("MainWindow", "\354\233\224\354\204\270", nullptr));
         pushButton->setText(QCoreApplication::translate("MainWindow", "\353\247\244\353\254\274\354\241\260\355\232\214", nullptr));
         comboBox_2->setItemText(0, QCoreApplication::translate("MainWindow", "\354\240\204\354\262\264", nullptr));
-        comboBox_2->setItemText(1, QCoreApplication::translate("MainWindow", "1\354\226\265~2\354\226\265", nullptr));
-        comboBox_2->setItemText(2, QCoreApplication::translate("MainWindow", "2\354\226\265~3\354\226\265", nullptr));
-        comboBox_2->setItemText(3, QCoreApplication::translate("MainWindow", "3\354\226\265~4\354\226\265", nullptr));
-        comboBox_2->setItemText(4, QCoreApplication::translate("MainWindow", "4\354\226\265~5\354\226\265", nullptr));
-        comboBox_2->setItemText(5, QCoreApplication::translate("MainWindow", "5\354\226\265~6\354\226\265", nullptr));
-        comboBox_2->setItemText(6, QCoreApplication::translate("MainWindow", "6\354\226\265~7\354\226\265", nullptr));
-        comboBox_2->setItemText(7, QCoreApplication::translate("MainWindow", "7\354\226\265~8\354\226\265", nullptr));
-        comboBox_2->setItemText(8, QCoreApplication::translate("MainWindow", "8\354\226\265~9\354\226\265", nullptr));
-        comboBox_2->setItemText(9, QCoreApplication::translate("MainWindow", "~10\354\226\265", nullptr));
+        comboBox_2->setItemText(1, QCoreApplication::translate("MainWindow", "5000\354\262\234\353\247\214 \354\235\264\355\225\230", nullptr));
+        comboBox_2->setItemText(2, QCoreApplication::translate("MainWindow", "5000\354\262\234\353\247\214~1\354\226\265", nullptr));
+        comboBox_2->setItemText(3, QCoreApplication::translate("MainWindow", "1\354\226\265~2\354\226\265", nullptr));
+        comboBox_2->setItemText(4, QCoreApplication::translate("MainWindow", "2\354\226\265~", nullptr));
 
         comboBox_3->setItemText(0, QCoreApplication::translate("MainWindow", "\354\240\204\354\262\264", nullptr));
         comboBox_3->setItemText(1, QCoreApplication::translate("MainWindow", "50\353\247\214\354\233\220 \353\257\270\353\247\214", nullptr));
-        comboBox_3->setItemText(2, QCoreApplication::translate("MainWindow", "50~70\353\247\214\354\233\220", nullptr));
-        comboBox_3->setItemText(3, QCoreApplication::translate("MainWindow", "71~90\353\247\214\354\233\220", nullptr));
-        comboBox_3->setItemText(4, QCoreApplication::translate("MainWindow", "91~110\353\247\214\354\233\220", nullptr));
-        comboBox_3->setItemText(5, QCoreApplication::translate("MainWindow", "111~130\353\247\214\354\233\220", nullptr));
-        comboBox_3->setItemText(6, QCoreApplication::translate("MainWindow", "131~150\353\247\214\354\233\220", nullptr));
+        comboBox_3->setItemText(2, QCoreApplication::translate("MainWindow", "50~100\353\247\214\354\233\220", nullptr));
+        comboBox_3->setItemText(3, QCoreApplication::translate("MainWindow", "100~200\353\247\214\354\233\220", nullptr));
+        comboBox_3->setItemText(4, QCoreApplication::translate("MainWindow", "200\353\247\214\354\233\220~", nullptr));
 
         label_2->setText(QCoreApplication::translate("MainWindow", "\353\263\264\354\246\235\352\270\210", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "\354\233\224\354\204\270", nullptr));
@@ -232,17 +209,10 @@ public:
 
         label_8->setText(QCoreApplication::translate("MainWindow", "\353\217\231\354\204\240\355\203\235", nullptr));
         comboBox_5->setItemText(0, QCoreApplication::translate("MainWindow", "\354\240\204\354\262\264", nullptr));
-        comboBox_5->setItemText(1, QCoreApplication::translate("MainWindow", "~1000\353\247\214\354\233\220", nullptr));
-        comboBox_5->setItemText(2, QCoreApplication::translate("MainWindow", "1000~2000\353\247\214\354\233\220", nullptr));
-        comboBox_5->setItemText(3, QCoreApplication::translate("MainWindow", "2000~3000\353\247\214\354\233\220", nullptr));
-        comboBox_5->setItemText(4, QCoreApplication::translate("MainWindow", "3000~4000\353\247\214\354\233\220", nullptr));
-        comboBox_5->setItemText(5, QCoreApplication::translate("MainWindow", "4000~5000\353\247\214\354\233\220", nullptr));
-        comboBox_5->setItemText(6, QCoreApplication::translate("MainWindow", "5000~6000\353\247\214\354\233\220", nullptr));
-        comboBox_5->setItemText(7, QCoreApplication::translate("MainWindow", "6000~7000\353\247\214\354\233\220", nullptr));
-        comboBox_5->setItemText(8, QCoreApplication::translate("MainWindow", "7000~8000\353\247\214\354\233\220", nullptr));
-        comboBox_5->setItemText(9, QCoreApplication::translate("MainWindow", "8000~9000\353\247\214\354\233\220", nullptr));
-        comboBox_5->setItemText(10, QCoreApplication::translate("MainWindow", "9000~1\354\226\265", nullptr));
-        comboBox_5->setItemText(11, QString());
+        comboBox_5->setItemText(1, QCoreApplication::translate("MainWindow", "1\354\226\265\354\235\264\355\225\230", nullptr));
+        comboBox_5->setItemText(2, QCoreApplication::translate("MainWindow", "1\354\226\265 ~ 5\354\226\265", nullptr));
+        comboBox_5->setItemText(3, QCoreApplication::translate("MainWindow", "5\354\226\265 \354\235\264\354\203\201", nullptr));
+        comboBox_5->setItemText(4, QString());
 
         label_9->setText(QCoreApplication::translate("MainWindow", "\353\217\231\354\204\240\355\203\235", nullptr));
         label_10->setText(QCoreApplication::translate("MainWindow", "\355\217\211\355\230\225\353\214\200", nullptr));
@@ -252,9 +222,7 @@ public:
         comboBox_1->setItemText(0, QCoreApplication::translate("MainWindow", "\354\240\204\354\262\264", nullptr));
         comboBox_1->setItemText(1, QCoreApplication::translate("MainWindow", "10\355\217\211\353\257\270\353\247\214", nullptr));
         comboBox_1->setItemText(2, QCoreApplication::translate("MainWindow", "10~20\355\217\211", nullptr));
-        comboBox_1->setItemText(3, QCoreApplication::translate("MainWindow", "21\355\217\211~30\355\217\211", nullptr));
-        comboBox_1->setItemText(4, QCoreApplication::translate("MainWindow", "31\355\217\211~40\355\217\211", nullptr));
-        comboBox_1->setItemText(5, QCoreApplication::translate("MainWindow", "41\355\217\211~50\355\217\211", nullptr));
+        comboBox_1->setItemText(3, QCoreApplication::translate("MainWindow", "21\355\217\211~", nullptr));
 
     } // retranslateUi
 

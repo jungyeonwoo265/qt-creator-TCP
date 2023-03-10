@@ -59,6 +59,5 @@ private:
     Ui::MainWindow *ui;
     QTcpSocket *TCPSocket;
     QByteArray Data_from_Server;
-    int data_size = 0;
 };
 #endif // CLIENT_H

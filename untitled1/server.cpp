@@ -101,10 +101,6 @@ void MainWindow::Send_Data_From_Socket(const int& command,const int& column, con
     QJsonDocument doc(json);
     QByteArray send = doc.toJson();
     qDebug()<<"내용"<<send.size()<<"byte";
-    QString send_size =QString("%1").arg(QString::number(send.size()), -20,QLatin1Char(' '));
-    QByteArray byteArray = QByteArray::fromRawData(send_size.toUtf8().constData(), send_size.toUtf8().length());
-    send = byteArray+send;
-
     qDebug()<<send.size()<<"byte";
     socket->write(send);
 }

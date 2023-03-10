@@ -29,21 +29,9 @@ void MainWindow::Read_Data_From_Socket()
     {
         QByteArray Data;
         Data = TCPSocket->readAll();
-        if(data_size==0)
-        {
-            data_size = Data.left(20).toInt();
-            qDebug()<<"1: "<<data_size;
-            qDebug()<<"2: "<<Data.size();
-            qDebug()<<"3: "<<Data.mid(20).size();
-            Data_from_Server.append(Data.mid(20));
-        }
-        else{
-            Data_from_Server.append(Data);
-        }
-        Data.clear();
-        qDebug()<<"4: "<<Data_from_Server.size()<<"byte";
+        Data_from_Server.append(Data);
+        qDebug()<<Data_from_Server.size()<<"byte";
         QJsonDocument doc = QJsonDocument::fromJson(Data_from_Server);
-
         QJsonObject obj = doc.object();
         int command = obj.value("command").toInt();
         int column = obj.value("column").toInt();
@@ -82,7 +70,6 @@ void MainWindow::Read_Data_From_Socket()
         }
         if(command){
             Data_from_Server.clear();
-            data_size=0;
         }
     }
 }
