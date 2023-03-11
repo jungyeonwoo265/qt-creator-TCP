@@ -1,4 +1,4 @@
-QT       += core gui network webenginewidgets
+QT       += core gui network webenginewidgets charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

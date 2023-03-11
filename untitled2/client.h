@@ -21,6 +21,14 @@
 #include <fstream>
 #include <QFile>
 #include <Windows.h>
+#include <QtCharts>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMainWindow>
+#include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QCategoryAxis>
+#include <QtWidgets/QVBoxLayout>
 
 using namespace std;
 
@@ -55,9 +63,16 @@ private slots:
 
     void veiw_map(const QString &html);
 
+    void on_tableWidget_cellDoubleClicked(int row);
+
+    void on_pushButton_2_clicked();
+
+    void show_graph(int row, QString addr);
+
 private:
     Ui::MainWindow *ui;
     QTcpSocket *TCPSocket;
     QByteArray Data_from_Server;
+    int tablewidget_row;
 };
 #endif // CLIENT_H

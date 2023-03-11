@@ -60,34 +60,56 @@ void MainWindow::Read_Data_From_Socket()
     int command = obj.value("command").toInt();
     QString Message = obj.value("message").toString();
     ui->textEdit->append(QString::number(socket->socketDescriptor())+":"+QString::number(command)+":"+Message);
-    if(command == 2)
-        query = "select * from daegu_real_estate where type = '매매'";
-    else if(command == 3)
-        query = "select * from daegu_real_estate where type = '월세'";
+    QList<QString> msg_list=Message.split(",");
+    if(command == 2){
+        query = "call proc_if(%1,%2,'%3')";
+        query = query.arg(msg_list[0],msg_list[1],msg_list[2]);
+    }
+    else if(command == 3){
+        query = "call proc_wolse(%1,%2,%3,'%4');";
+        query = query.arg(msg_list[0],msg_list[1],msg_list[2],msg_list[3]);
+    }
+    else if(command == 4){
+        query = "select * from count_element_estate where ji_addr = '%1'";
+        query = query.arg(Message);
+    }
+    else if(command == 5)
+        query=(QString("SELECT cafe_num, apt_num, parking_num, hospital_num, funeral_num, public_num, university_num, subway_num, company_num, bus_num, light_num FROM count_element_estate WHERE ji_addr = '%1'").arg(Message) +" UNION " +"SELECT avg(bus_num), avg(cafe_num), avg(apt_num), avg(light_num), avg(parking_num), avg(hospital_num), avg(funeral_num), avg(public_num), avg(university_num), avg(subway_num), avg(company_num) FROM count_average_estate");
+
+    qDebug()<<"query: "<<query;
     read_db(command, query, *socket);
 }
 
-void MainWindow::read_db(const int& command,const QString& message, QTcpSocket& socket)
+void MainWindow::read_db(int& command,const QString& message, QTcpSocket& socket)
 {
     QList<QString> send_message;
-    QString queryStr;
     QSqlQuery query;
-
-    queryStr = message;
-    query.prepare(queryStr);
-    query.exec();
+    if(command==2||command==3){
+        query.exec(message);
+    }
+    else{
+        query.prepare(message);
+        query.exec();
+    }
     query.next();
     QSqlRecord record = query.record();
     int column = record.count();
 
-    query.prepare(message);
-    query.exec();
+    if(command==2||command==3){
+        query.exec(message);
+    }
+    else{
+        query.prepare(message);
+        query.exec();
+    }
     while (query.next()) {
         for(int i=0; i<column; i++){
             QString message = query.value(i).toString();
             send_message.append(message);
         }
     }
+    if(send_message.isEmpty())
+        return;
     QString msg = send_message.join(",");
     Send_Data_From_Socket(command, column, msg, &socket);
 }
@@ -100,7 +122,6 @@ void MainWindow::Send_Data_From_Socket(const int& command,const int& column, con
     json.insert("message", msg);
     QJsonDocument doc(json);
     QByteArray send = doc.toJson();
-    qDebug()<<"내용"<<send.size()<<"byte";
     qDebug()<<send.size()<<"byte";
     socket->write(send);
 }

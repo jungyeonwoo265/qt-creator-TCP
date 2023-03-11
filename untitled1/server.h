@@ -42,7 +42,7 @@ private slots:
 
     void Send_Data_From_Socket(const int& command,const int& columm, const QString& msg, QTcpSocket* socket);
 
-    void read_db(const int& command,const QString& message, QTcpSocket& socket);
+    void read_db(int& command,const QString& message, QTcpSocket& socket);
 
 private:
     Ui::MainWindow *ui;
