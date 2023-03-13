@@ -40,7 +40,7 @@ color:rgb(47, 0, 0)
      <number>5</number>
     </property>
     <property name="text">
-     <string>대구 가성비 카페 매물 추천</string>
+     <string>대구 가성비 카페 매물 추천 TOP10</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -427,14 +427,14 @@ background-color:rgb(118, 91, 72)</string>
    <widget class="QStackedWidget" name="stackedWidget_2">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>10</x>
       <y>170</y>
-      <width>431</width>
-      <height>441</height>
+      <width>941</width>
+      <height>431</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page_6">
      <widget class="QTableWidget" name="tableWidget_2">
@@ -448,6 +448,9 @@ background-color:rgb(118, 91, 72)</string>
       </property>
       <property name="styleSheet">
        <string notr="true">font: 10pt &quot;경기천년바탕 Regular&quot;;</string>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
@@ -467,6 +470,16 @@ background-color:rgb(118, 91, 72)</string>
       <attribute name="verticalHeaderVisible">
        <bool>false</bool>
       </attribute>
+      <column>
+       <property name="text">
+        <string>내역</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>수량</string>
+       </property>
+      </column>
       <column>
        <property name="text">
         <string>내역</string>
@@ -954,6 +967,17 @@ border: 1px solid rgb(26, 26, 26);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>10</y>
+        <width>481</width>
+        <height>411</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2"/>
+     </widget>
     </widget>
     <widget class="QWidget" name="page_5">
      <widget class="QTableWidget" name="tableWidget">
@@ -1003,18 +1027,22 @@ background-color:rgb(118, 91, 72)</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <widget class="QWebEngineView" name="webEngineView" native="true">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>10</y>
+        <width>471</width>
+        <height>411</height>
+       </rect>
+      </property>
+      <property name="url" stdset="0">
+       <url>
+        <string>about:blank</string>
+       </url>
+      </property>
+     </widget>
     </widget>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>220</y>
-      <width>471</width>
-      <height>371</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
    <widget class="Line" name="line">
     <property name="geometry">
@@ -1032,7 +1060,7 @@ background-color:rgb(118, 91, 72)</string>
    <widget class="Line" name="line_2">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>440</x>
       <y>159</y>
       <width>20</width>
       <height>461</height>
@@ -1055,7 +1083,7 @@ background-color:rgb(118, 91, 72)</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../Desktop/coffee-2734137_1920.jpg</pixmap>
+     <pixmap>../coffee-2734137_1920.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -1069,7 +1097,6 @@ background-color:rgb(118, 91, 72)</string>
    <zorder>stackedWidget</zorder>
    <zorder>comboBox_1</zorder>
    <zorder>stackedWidget_2</zorder>
-   <zorder>verticalLayoutWidget</zorder>
    <zorder>line</zorder>
    <zorder>line_2</zorder>
   </widget>
@@ -1085,6 +1112,13 @@ background-color:rgb(118, 91, 72)</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

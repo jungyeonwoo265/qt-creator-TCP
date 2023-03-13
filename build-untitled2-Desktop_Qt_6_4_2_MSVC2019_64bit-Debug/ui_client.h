@@ -10,6 +10,7 @@
 #define UI_CLIENT_H
 
 #include <QtCore/QVariant>
+#include <QtWebEngineWidgets/QWebEngineView>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QFrame>
@@ -80,11 +81,12 @@ public:
     QLabel *label_24;
     QLabel *label_25;
     QLabel *label_26;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout_2;
     QWidget *page_5;
     QTableWidget *tableWidget;
     QLabel *label_5;
-    QWidget *verticalLayoutWidget;
-    QVBoxLayout *verticalLayout;
+    QWebEngineView *webEngineView;
     QFrame *line;
     QFrame *line_2;
     QLabel *label_28;
@@ -238,19 +240,24 @@ public:
 "background-color:rgb(118, 91, 72)"));
         stackedWidget_2 = new QStackedWidget(centralwidget);
         stackedWidget_2->setObjectName("stackedWidget_2");
-        stackedWidget_2->setGeometry(QRect(520, 170, 431, 441));
+        stackedWidget_2->setGeometry(QRect(10, 170, 941, 431));
         page_6 = new QWidget();
         page_6->setObjectName("page_6");
         tableWidget_2 = new QTableWidget(page_6);
-        if (tableWidget_2->columnCount() < 2)
-            tableWidget_2->setColumnCount(2);
+        if (tableWidget_2->columnCount() < 4)
+            tableWidget_2->setColumnCount(4);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget_2->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
         tableWidget_2->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        tableWidget_2->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
+        tableWidget_2->setHorizontalHeaderItem(3, __qtablewidgetitem3);
         tableWidget_2->setObjectName("tableWidget_2");
         tableWidget_2->setGeometry(QRect(20, 230, 401, 141));
         tableWidget_2->setStyleSheet(QString::fromUtf8("font: 10pt \"\352\262\275\352\270\260\354\262\234\353\205\204\353\260\224\355\203\225 Regular\";"));
+        tableWidget_2->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         tableWidget_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableWidget_2->setTextElideMode(Qt::ElideRight);
         tableWidget_2->setSortingEnabled(true);
@@ -430,6 +437,12 @@ public:
 "background-color: rgb(255, 255, 255);\n"
 "border: 1px solid rgb(26, 26, 26);"));
         label_26->setAlignment(Qt::AlignCenter);
+        verticalLayoutWidget = new QWidget(page_6);
+        verticalLayoutWidget->setObjectName("verticalLayoutWidget");
+        verticalLayoutWidget->setGeometry(QRect(450, 10, 481, 411));
+        verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
         stackedWidget_2->addWidget(page_6);
         page_5 = new QWidget();
         page_5->setObjectName("page_5");
@@ -448,13 +461,11 @@ public:
 "color:rgb(255, 255, 255);\n"
 "background-color:rgb(118, 91, 72)"));
         label_5->setAlignment(Qt::AlignCenter);
+        webEngineView = new QWebEngineView(page_5);
+        webEngineView->setObjectName("webEngineView");
+        webEngineView->setGeometry(QRect(460, 10, 471, 411));
+        webEngineView->setProperty("url", QVariant(QUrl(QString::fromUtf8("about:blank"))));
         stackedWidget_2->addWidget(page_5);
-        verticalLayoutWidget = new QWidget(centralwidget);
-        verticalLayoutWidget->setObjectName("verticalLayoutWidget");
-        verticalLayoutWidget->setGeometry(QRect(20, 220, 471, 371));
-        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
-        verticalLayout->setObjectName("verticalLayout");
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
         line = new QFrame(centralwidget);
         line->setObjectName("line");
         line->setGeometry(QRect(10, 145, 951, 31));
@@ -462,13 +473,13 @@ public:
         line->setFrameShadow(QFrame::Sunken);
         line_2 = new QFrame(centralwidget);
         line_2->setObjectName("line_2");
-        line_2->setGeometry(QRect(500, 159, 20, 461));
+        line_2->setGeometry(QRect(440, 159, 20, 461));
         line_2->setFrameShape(QFrame::VLine);
         line_2->setFrameShadow(QFrame::Sunken);
         label_28 = new QLabel(centralwidget);
         label_28->setObjectName("label_28");
         label_28->setGeometry(QRect(0, 0, 961, 621));
-        label_28->setPixmap(QPixmap(QString::fromUtf8("../../../Desktop/coffee-2734137_1920.jpg")));
+        label_28->setPixmap(QPixmap(QString::fromUtf8("../coffee-2734137_1920.jpg")));
         label_28->setScaledContents(true);
         MainWindow->setCentralWidget(centralwidget);
         label_28->raise();
@@ -479,7 +490,6 @@ public:
         stackedWidget->raise();
         comboBox_1->raise();
         stackedWidget_2->raise();
-        verticalLayoutWidget->raise();
         line->raise();
         line_2->raise();
         menubar = new QMenuBar(MainWindow);
@@ -541,6 +551,10 @@ public:
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "\353\202\264\354\227\255", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget_2->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "\354\210\230\353\237\211", nullptr));
+        QTableWidgetItem *___qtablewidgetitem2 = tableWidget_2->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QCoreApplication::translate("MainWindow", "\353\202\264\354\227\255", nullptr));
+        QTableWidgetItem *___qtablewidgetitem3 = tableWidget_2->horizontalHeaderItem(3);
+        ___qtablewidgetitem3->setText(QCoreApplication::translate("MainWindow", "\354\210\230\353\237\211", nullptr));
         pushButton_2->setText(QCoreApplication::translate("MainWindow", "\354\241\260\355\232\214 \353\202\264\354\227\255 \353\263\264\352\270\260", nullptr));
         label_7->setText(QCoreApplication::translate("MainWindow", "\352\270\260\354\244\200 : \354\213\240\355\230\270\353\223\261, \353\262\204\354\212\244\354\240\225\353\245\230\354\236\245 \353\260\230\352\262\275 10M\n"
 "\352\267\270\354\231\270 300M", nullptr));

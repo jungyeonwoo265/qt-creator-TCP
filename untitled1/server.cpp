@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     db.setPassword("aaaa");
     if(!db.open())
         QMessageBox::information(this,"Error", "데이터베이스 연결 실패");
-
 }
 
 MainWindow::~MainWindow()
@@ -61,7 +60,6 @@ void MainWindow::Read_Data_From_Socket()
     QString Message = obj.value("message").toString();
     ui->textEdit->append(QString::number(socket->socketDescriptor())+":"+QString::number(command)+":"+Message);
     QList<QString> msg_list=Message.split(",");
-    qDebug()<<"command: "<<command;
     if(command == 2){
         query = "call proc_if(%1,%2,'%3')";
         query = query.arg(msg_list[0],msg_list[1],msg_list[2]);
@@ -77,7 +75,6 @@ void MainWindow::Read_Data_From_Socket()
     else if(command == 5)
         query=(QString("SELECT cafe_num, apt_num, parking_num, hospital_num, funeral_num, public_num, university_num, subway_num, company_num, bus_num, light_num FROM count_element_estate WHERE ji_addr = '%1'").arg(Message) +" UNION " +"SELECT avg(bus_num), avg(cafe_num), avg(apt_num), avg(light_num), avg(parking_num), avg(hospital_num), avg(funeral_num), avg(public_num), avg(university_num), avg(subway_num), avg(company_num) FROM count_average_estate");
 
-    qDebug()<<"query: "<<query;
     read_db(command, query, *socket);
 }
 
@@ -110,7 +107,6 @@ void MainWindow::read_db(int& command,const QString& message, QTcpSocket& socket
         }
     }
     if(send_message.isEmpty()){
-        qDebug()<<"DB데이터 없음";
         if(command==2||command==3){
             command = 100;
             Send_Data_From_Socket(command, column, message, &socket);

@@ -69,8 +69,6 @@ private slots:
 
     void show_graph(QString addr);
 
-    void open_map();
-
     void Delete_item();
 
 private:

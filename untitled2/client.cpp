@@ -45,7 +45,6 @@ void MainWindow::Read_Data_From_Socket()
         int column = obj.value("column").toInt();
         QString Message = obj.value("message").toString();
         QList<QString> msg_list = Message.split(",");
-        qDebug()<<"command: "<<command;
         if (command == 1)
         {
             for(int i=0; i<msg_list.size(); i++)
@@ -63,7 +62,10 @@ void MainWindow::Read_Data_From_Socket()
             QList<QString> po_list;
             QString latlng = "new kakao.maps.LatLng(%1, %2)";
             QString title = "'%1'";
-            for(int i=0; i<msg_list.size()/column; i++)
+            int top = msg_list.size()/column;
+            if(top > 10)
+                top=10;
+            for(int i=0; i<top; i++)
             {
                 json.insert("title",title.arg(msg_list[i*column+1]));
                 json.insert("latlng", latlng.arg(msg_list[i*column+column-2],msg_list[i*column+column-1]));
@@ -77,12 +79,17 @@ void MainWindow::Read_Data_From_Socket()
             veiw_map(html);
         }
         else if(command == 4){
+            int row = msg_list.size()/2;
             ui->tableWidget_2->setRowCount(0);
-            ui->tableWidget_2->setRowCount(msg_list.size()-1);
+            ui->tableWidget_2->setRowCount(row);
             QStringList column_name = {"카페", "아파트", "주차장", "병원", "장례식장", "공공기관", "대학교", "지하철", "회사", "버스정류장", "신호등"};
-            for(int i = 0; i<msg_list.size()-1;i++){
-                ui->tableWidget_2->setItem(i,0,new QTableWidgetItem(column_name[i]));
-                ui->tableWidget_2->setItem(i,1,new QTableWidgetItem(msg_list[i]));
+            for(int i = 0; i<row ;i++){
+                ui->tableWidget_2->setItem(i,0,new QTableWidgetItem(column_name[i*2]));
+                ui->tableWidget_2->setItem(i,1,new QTableWidgetItem(msg_list[i*2]));
+                if(i!=row-1){
+                    ui->tableWidget_2->setItem(i,2,new QTableWidgetItem(column_name[i*2+1]));
+                    ui->tableWidget_2->setItem(i,3,new QTableWidgetItem(msg_list[i*2+1]));
+                }
             }
             ui->label_21->setText(ui->tableWidget->item(tablewidget_row,2)->text());
             ui->label_22->setText(ui->tableWidget->item(tablewidget_row,1)->text());
@@ -146,13 +153,12 @@ void MainWindow::Read_Data_From_Socket()
             // 차트 뷰 생성
             QChartView *chartView = new QChartView(chart);
             chartView->setRenderHint(QPainter::Antialiasing);
-            ui->verticalLayout->addWidget(chartView);
+            ui->verticalLayout_2->addWidget(chartView);
 
             // 차트 뷰 보이기
             chartView->show();
 
             ui->stackedWidget_2->setCurrentIndex(0);
-            qDebug()<<"chartView: "<<chartView;
         }
         else if(command==100)
             QMessageBox::information(this, "안내창", "검색결과 없음");
@@ -163,12 +169,16 @@ void MainWindow::Read_Data_From_Socket()
 }
 
 void MainWindow::add_tableWidget(const int& column , QList<QString>& msg_list){
+    ui->tableWidget->setColumnCount(0);
+    ui->tableWidget->setRowCount(0);
     QStringList column_name;
     if(column == 8)
         column_name = {"랭킹", "지번", "유형", "평수", "매매가", "점수"};
     else
         column_name = {"랭킹", "지번", "유형", "평수", "보증금", "월세", "점수"};
     int row = msg_list.size()/column;
+    if(row>10)
+        row=10;
     ui->tableWidget->setColumnCount(column-2);
     ui->tableWidget->setRowCount(row);
     ui->tableWidget->setHorizontalHeaderLabels(column_name);
@@ -187,17 +197,12 @@ void MainWindow::send_message(int& command, QString& message){
         json.insert("message", message);
         QJsonDocument doc(json);
         QByteArray send = doc.toJson();
-        qDebug()<<"send: "<<send;
         TCPSocket->write(send);
     }
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    qDebug()<<"버튼 누름";
-    Delete_item();
-    ui->tableWidget->setColumnCount(0);
-    ui->tableWidget->setRowCount(0);
     int command;
     QString message;
     int com1 = ui->comboBox_1->currentIndex();
@@ -216,7 +221,6 @@ void MainWindow::on_pushButton_clicked()
         command = 3;
         message = QString::number(com1)+","+QString::number(com2)+","+QString::number(com3)+","+com4;
     }
-    qDebug()<< command<< message;
     send_message(command, message);
     ui->stackedWidget_2->setCurrentIndex(1);
 }
@@ -250,7 +254,7 @@ QString MainWindow::make_html(const QString &center, const QString &positions)
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
         center: new kakao.maps.LatLng(%1), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+        level: 7 // 지도의 확대 레벨
     };
 
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -305,16 +309,26 @@ void MainWindow::write_html(const QString &filename, const QString &html)
 void MainWindow::on_pushButton_2_clicked()
 {
     ui->stackedWidget_2->setCurrentIndex(1);
-    open_map();
 }
+
 void MainWindow::veiw_map(const QString &html)
 {
     QString filename = "C:/Qt/marker.html";
-    write_html(filename, html);
-    this->mapview = new QWebEngineView();
-    mapview->setUrl(QUrl("http://localhost/Qt/marker.html"));
-    ui->verticalLayout->addWidget(mapview);
-    qDebug()<<"view: "<<mapview;
+//    write_html(filename, html);
+
+    QFile file(filename);
+    if(!file.open(QFile::WriteOnly | QFile::Text))
+    {
+        qDebug() << " Could not open file for writing";
+        return;
+    }
+    QTextStream out(&file);
+    out << html;
+    file.flush();
+    file.close();
+    ui->webEngineView->load(QUrl("http://localhost/Qt/marker.html"));
+    QString url = ui->webEngineView->url().toString();
+    qDebug()<<url;
 }
 
 
@@ -326,9 +340,6 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row)
     send_message(command, message);
 }
 
-
-
-
 void MainWindow::show_graph(QString addr)
 {
     Delete_item();
@@ -336,23 +347,12 @@ void MainWindow::show_graph(QString addr)
     send_message(command, addr);
 }
 
-void MainWindow::open_map()
-{
-    Delete_item();
-    this->mapview = new QWebEngineView();
-    mapview->setUrl(QUrl("http://localhost/Qt/marker.html"));
-    ui->verticalLayout->addWidget(mapview);
-    qDebug()<<"reload view: "<<mapview;
-}
-
 void MainWindow::Delete_item()
 {
     QLayoutItem* item;
-    while((item = ui->verticalLayout->takeAt(0)) != nullptr)
+    while((item = ui->verticalLayout_2->takeAt(0)) != nullptr)
     {
-        qDebug()<<"delete widget: "<<item->widget();
         delete item->widget();
-        qDebug()<<"delete item: "<<item;
         delete item;
     }
 }
