@@ -187,12 +187,14 @@ void MainWindow::send_message(int& command, QString& message){
         json.insert("message", message);
         QJsonDocument doc(json);
         QByteArray send = doc.toJson();
+        qDebug()<<"send: "<<send;
         TCPSocket->write(send);
     }
 }
 
 void MainWindow::on_pushButton_clicked()
 {
+    qDebug()<<"버튼 누름";
     Delete_item();
     ui->tableWidget->setColumnCount(0);
     ui->tableWidget->setRowCount(0);
@@ -214,6 +216,7 @@ void MainWindow::on_pushButton_clicked()
         command = 3;
         message = QString::number(com1)+","+QString::number(com2)+","+QString::number(com3)+","+com4;
     }
+    qDebug()<< command<< message;
     send_message(command, message);
     ui->stackedWidget_2->setCurrentIndex(1);
 }
@@ -344,7 +347,6 @@ void MainWindow::open_map()
 
 void MainWindow::Delete_item()
 {
-    qDebug()<<"mapview: "<<mapview;
     QLayoutItem* item;
     while((item = ui->verticalLayout->takeAt(0)) != nullptr)
     {

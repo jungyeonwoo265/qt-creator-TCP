@@ -61,6 +61,7 @@ void MainWindow::Read_Data_From_Socket()
     QString Message = obj.value("message").toString();
     ui->textEdit->append(QString::number(socket->socketDescriptor())+":"+QString::number(command)+":"+Message);
     QList<QString> msg_list=Message.split(",");
+    qDebug()<<"command: "<<command;
     if(command == 2){
         query = "call proc_if(%1,%2,'%3')";
         query = query.arg(msg_list[0],msg_list[1],msg_list[2]);
