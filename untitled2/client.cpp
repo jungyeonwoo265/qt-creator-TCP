@@ -10,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget_2->setCurrentIndex(1);
 
     TCPSocket = new QTcpSocket();
-    TCPSocket->connectToHost(QHostAddress("10.10.21.105"),5001);
-//    TCPSocket->connectToHost(QHostAddress::LocalHost,5001);
+//    TCPSocket->connectToHost(QHostAddress("10.10.21.105"),5001);
+    TCPSocket->connectToHost(QHostAddress::LocalHost,5001);
     TCPSocket->open(QIODevice::ReadWrite);
     connect(TCPSocket,SIGNAL(readyRead()),this,SLOT(Read_Data_From_Socket()));
     if (TCPSocket->isOpen())
@@ -22,14 +22,13 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    QLayoutItem* item;
-    while((item = ui->verticalLayout->takeAt(0)) != nullptr)
-    {
-        qDebug()<<"delete widget: "<<item->widget();
-        delete item->widget();
-        delete item;
-    }
+    Delete_item();
+    Data_from_Server.clear();
+    qDebug()<<"Data_from_Server.clear";
+    delete TCPSocket;
+    qDebug()<<"delete TCPSocket";
     delete ui;
+    qDebug()<<"delete ui";
 }
 
 void MainWindow::Read_Data_From_Socket()
@@ -46,6 +45,7 @@ void MainWindow::Read_Data_From_Socket()
         int column = obj.value("column").toInt();
         QString Message = obj.value("message").toString();
         QList<QString> msg_list = Message.split(",");
+        qDebug()<<"command: "<<command;
         if (command == 1)
         {
             for(int i=0; i<msg_list.size(); i++)
@@ -73,14 +73,13 @@ void MainWindow::Read_Data_From_Socket()
             }
             QString positions = po_list.join(",");
             positions = positions.remove("\"");
-
             QString html = make_html(center, positions);
             veiw_map(html);
         }
         else if(command == 4){
             ui->tableWidget_2->setRowCount(0);
             ui->tableWidget_2->setRowCount(msg_list.size()-1);
-            QStringList column_name = {"카페", "아파트", "주차장", "병원", "장례식장", "공공기관", "대학교", "지하철", "회사", "버스정류장", "신호등", "주소"};
+            QStringList column_name = {"카페", "아파트", "주차장", "병원", "장례식장", "공공기관", "대학교", "지하철", "회사", "버스정류장", "신호등"};
             for(int i = 0; i<msg_list.size()-1;i++){
                 ui->tableWidget_2->setItem(i,0,new QTableWidgetItem(column_name[i]));
                 ui->tableWidget_2->setItem(i,1,new QTableWidgetItem(msg_list[i]));
@@ -102,7 +101,6 @@ void MainWindow::Read_Data_From_Socket()
         }
         else if(command == 5)
         {
-            qDebug()<<msg_list;
             QBarSeries *series1 = new QBarSeries();
             QBarSet *set1 = new QBarSet("개수");
             *set1 << msg_list[9].toInt() << msg_list[0].toInt()<< msg_list[1].toInt()<< msg_list[19].toInt()<< msg_list[2].toInt()<< msg_list[3].toInt()<< msg_list[4].toInt()<< msg_list[5].toInt()<< msg_list[6].toInt()<< msg_list[7].toInt()<< msg_list[8].toInt();
@@ -143,6 +141,8 @@ void MainWindow::Read_Data_From_Socket()
             series1->attachAxis(axisY);
             series2->attachAxis(axisY);
 
+            chart->setAnimationOptions(QChart::SeriesAnimations);
+
             // 차트 뷰 생성
             QChartView *chartView = new QChartView(chart);
             chartView->setRenderHint(QPainter::Antialiasing);
@@ -152,8 +152,10 @@ void MainWindow::Read_Data_From_Socket()
             chartView->show();
 
             ui->stackedWidget_2->setCurrentIndex(0);
+            qDebug()<<"chartView: "<<chartView;
         }
-
+        else if(command==100)
+            QMessageBox::information(this, "안내창", "검색결과 없음");
         if(command){
             Data_from_Server.clear();
         }
@@ -187,24 +189,15 @@ void MainWindow::send_message(int& command, QString& message){
         QByteArray send = doc.toJson();
         TCPSocket->write(send);
     }
-    else
-        QMessageBox::information(this,"ERROR",TCPSocket->errorString());
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    QLayoutItem* item;
-    while((item = ui->verticalLayout->takeAt(0)) != nullptr)
-    {
-        qDebug()<<"delete widget: "<<item->widget();
-        delete item->widget();
-        delete item;
-    }
+    Delete_item();
     ui->tableWidget->setColumnCount(0);
     ui->tableWidget->setRowCount(0);
     int command;
     QString message;
-
     int com1 = ui->comboBox_1->currentIndex();
     if(ui->radioButton->isChecked())
     {
@@ -287,7 +280,8 @@ for (var i = 0; i < positions.length; i ++) {
 </body>
 </html>
 )";
-    return html.arg(center,positions);
+    html = html.arg(center,positions);
+    return html;
 }
 
 
@@ -305,13 +299,19 @@ void MainWindow::write_html(const QString &filename, const QString &html)
     file.close();
 }
 
-void MainWindow::veiw_map(const QString &html){
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->stackedWidget_2->setCurrentIndex(1);
+    open_map();
+}
+void MainWindow::veiw_map(const QString &html)
+{
     QString filename = "C:/Qt/marker.html";
     write_html(filename, html);
-    QWebEngineView *view = new QWebEngineView();
-    view->setUrl(QUrl("http://localhost/Qt/marker.html"));
-    ui->verticalLayout->addWidget(view);
-    qDebug()<<"view: "<<view;
+    this->mapview = new QWebEngineView();
+    mapview->setUrl(QUrl("http://localhost/Qt/marker.html"));
+    ui->verticalLayout->addWidget(mapview);
+    qDebug()<<"view: "<<mapview;
 }
 
 
@@ -324,19 +324,33 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row)
 }
 
 
-void MainWindow::on_pushButton_2_clicked()
+
+
+void MainWindow::show_graph(QString addr)
 {
-    ui->stackedWidget_2->setCurrentIndex(1);
+    Delete_item();
+    int command = 5;
+    send_message(command, addr);
 }
 
-void MainWindow::show_graph(QString addr){
+void MainWindow::open_map()
+{
+    Delete_item();
+    this->mapview = new QWebEngineView();
+    mapview->setUrl(QUrl("http://localhost/Qt/marker.html"));
+    ui->verticalLayout->addWidget(mapview);
+    qDebug()<<"reload view: "<<mapview;
+}
+
+void MainWindow::Delete_item()
+{
+    qDebug()<<"mapview: "<<mapview;
     QLayoutItem* item;
     while((item = ui->verticalLayout->takeAt(0)) != nullptr)
     {
         qDebug()<<"delete widget: "<<item->widget();
         delete item->widget();
+        qDebug()<<"delete item: "<<item;
         delete item;
     }
-    int command = 5;
-    send_message(command, addr);
 }

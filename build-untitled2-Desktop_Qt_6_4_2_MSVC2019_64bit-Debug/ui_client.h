@@ -196,6 +196,7 @@ public:
         tableWidget_2->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         tableWidget_2->setObjectName("tableWidget_2");
         tableWidget_2->setGeometry(QRect(20, 230, 401, 141));
+        tableWidget_2->setLayoutDirection(Qt::LeftToRight);
         tableWidget_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableWidget_2->horizontalHeader()->setVisible(true);
         tableWidget_2->horizontalHeader()->setStretchLastSection(true);
@@ -357,7 +358,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 967, 22));
+        menubar->setGeometry(QRect(0, 0, 967, 21));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");

@@ -69,10 +69,16 @@ private slots:
 
     void show_graph(QString addr);
 
+    void open_map();
+
+    void Delete_item();
+
 private:
     Ui::MainWindow *ui;
     QTcpSocket *TCPSocket;
     QByteArray Data_from_Server;
     int tablewidget_row;
+    QWebEngineView *mapview;
+
 };
 #endif // CLIENT_H

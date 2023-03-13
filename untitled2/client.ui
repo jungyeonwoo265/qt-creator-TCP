@@ -357,6 +357,9 @@
         <height>141</height>
        </rect>
       </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
@@ -887,7 +890,7 @@
      <x>0</x>
      <y>0</y>
      <width>967</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

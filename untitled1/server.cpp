@@ -108,8 +108,14 @@ void MainWindow::read_db(int& command,const QString& message, QTcpSocket& socket
             send_message.append(message);
         }
     }
-    if(send_message.isEmpty())
+    if(send_message.isEmpty()){
+        qDebug()<<"DB데이터 없음";
+        if(command==2||command==3){
+            command = 100;
+            Send_Data_From_Socket(command, column, message, &socket);
+        }
         return;
+    }
     QString msg = send_message.join(",");
     Send_Data_From_Socket(command, column, msg, &socket);
 }
