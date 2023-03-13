@@ -67,7 +67,7 @@ private slots:
 
     void on_pushButton_2_clicked();
 
-    void show_graph(int row, QString addr);
+    void show_graph(QString addr);
 
 private:
     Ui::MainWindow *ui;

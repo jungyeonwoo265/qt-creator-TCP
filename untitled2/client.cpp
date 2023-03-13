@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget_2->setCurrentIndex(1);
 
     TCPSocket = new QTcpSocket();
-    TCPSocket->connectToHost(QHostAddress::LocalHost,5001);
+    TCPSocket->connectToHost(QHostAddress("10.10.21.105"),5001);
+//    TCPSocket->connectToHost(QHostAddress::LocalHost,5001);
     TCPSocket->open(QIODevice::ReadWrite);
     connect(TCPSocket,SIGNAL(readyRead()),this,SLOT(Read_Data_From_Socket()));
     if (TCPSocket->isOpen())
@@ -97,7 +98,7 @@ void MainWindow::Read_Data_From_Socket()
                 ui->label_25->setText(ui->tableWidget->item(tablewidget_row,4)->text());
                 ui->label_26->setText(ui->tableWidget->item(tablewidget_row,5)->text());
             }
-            show_graph(tablewidget_row,ui->tableWidget->item(tablewidget_row,1)->text());
+            show_graph(ui->tableWidget->item(tablewidget_row,1)->text());
         }
         else if(command == 5)
         {
@@ -253,13 +254,16 @@ QString MainWindow::make_html(const QString &center, const QString &positions)
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
         center: new kakao.maps.LatLng(%1), // 지도의 중심좌표
-        level: 8 // 지도의 확대 레벨
+        level: 3 // 지도의 확대 레벨
     };
 
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
 // 마커를 표시할 위치와 title 객체 배열입니다
-var positions = [%2];
+var positions = [
+%2
+];
+
 // 마커 이미지의 이미지 주소입니다
 var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
@@ -281,8 +285,9 @@ for (var i = 0; i < positions.length; i ++) {
 }
 </script>
 </body>
-</html>)";
-    return html.arg(center, positions);
+</html>
+)";
+    return html.arg(center,positions);
 }
 
 
@@ -324,7 +329,7 @@ void MainWindow::on_pushButton_2_clicked()
     ui->stackedWidget_2->setCurrentIndex(1);
 }
 
-void MainWindow::show_graph(int row, QString addr){
+void MainWindow::show_graph(QString addr){
     QLayoutItem* item;
     while((item = ui->verticalLayout->takeAt(0)) != nullptr)
     {
