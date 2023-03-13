@@ -448,10 +448,14 @@ public:
         page_5->setObjectName("page_5");
         tableWidget = new QTableWidget(page_5);
         tableWidget->setObjectName("tableWidget");
-        tableWidget->setGeometry(QRect(10, 50, 411, 371));
+        tableWidget->setGeometry(QRect(10, 50, 411, 361));
+        tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        tableWidget->setAutoScroll(false);
+        tableWidget->setAutoScrollMargin(20);
         tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableWidget->horizontalHeader()->setDefaultSectionSize(100);
-        tableWidget->horizontalHeader()->setStretchLastSection(false);
+        tableWidget->horizontalHeader()->setStretchLastSection(true);
         tableWidget->verticalHeader()->setVisible(false);
         label_5 = new QLabel(page_5);
         label_5->setObjectName("label_5");
@@ -503,7 +507,7 @@ public:
         retranslateUi(MainWindow);
 
         stackedWidget->setCurrentIndex(1);
-        stackedWidget_2->setCurrentIndex(0);
+        stackedWidget_2->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -512,7 +516,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "\353\214\200\352\265\254 \352\260\200\354\204\261\353\271\204 \354\271\264\355\216\230 \353\247\244\353\254\274 \354\266\224\354\262\234", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "\353\214\200\352\265\254 \352\260\200\354\204\261\353\271\204 \354\271\264\355\216\230 \353\247\244\353\254\274 \354\266\224\354\262\234 TOP10", nullptr));
         radioButton->setText(QCoreApplication::translate("MainWindow", "\353\247\244\353\247\244", nullptr));
         radioButton_2->setText(QCoreApplication::translate("MainWindow", "\354\233\224\354\204\270", nullptr));
         pushButton->setText(QCoreApplication::translate("MainWindow", "\353\247\244\353\254\274\354\241\260\355\232\214", nullptr));
